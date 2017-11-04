@@ -6,9 +6,9 @@ var studentController = require('../controller/studentController');
 
 /* GET home page. */
 router.get('/', studentController.homepage);
-router.post('/student/add',upload.single('') , studentController.createStudent);
+router.post('/student/add',upload.single('profileimage') , studentController.createStudent);
 router.get('/student/show/:id', studentController.studentDetail);
-router.post('/student/edit/:id',upload.single('') , studentController.editStudent);
+router.post('/student/edit/:id',upload.single('profileimage') , studentController.editStudent);
 router.get('/student/delete/:id', studentController.deleteStudent);
 
 

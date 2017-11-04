@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 // connection to database
-mongoose.connect('mongodb://localhost/studentdb');
+mongoose.connect('mongodb://abbaxee:123456@ds145275.mlab.com:45275/studentdb');
 var db = mongoose.connection;
 
 // Student Schema
@@ -34,6 +34,9 @@ var studentSchema = new mongoose.Schema({
         type: String
     },
     state: {
+        type: String
+    },
+    profileimage: {
         type: String
     }
     

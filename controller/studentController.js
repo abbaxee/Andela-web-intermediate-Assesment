@@ -9,16 +9,26 @@ exports.homepage = function(req, res, next) {
 }
 
 exports.createStudent = function (req, res, next) {
+   
+    // Check File Upload
+    if (req.file){
+        console.log('Uploading Image...');
+        var profileimage = req.file.filename;
+    } else {
+        console.log('NO image Upload!');
+        var profileimage = '';
+    }
+
     // Form Validation
     req.checkBody('name', 'Name must be specified.').notEmpty();
     req.checkBody('email', 'Invalid email address.').isEmail();
-    req.checkBody('mobile', 'Mobile must be specified.').notEmpty();
-    req.checkBody('date_of_birth', 'Invalid date').notEmpty();
+    req.checkBody('school', 'School must be specified.').notEmpty();
+    req.checkBody('department', 'Department must be specified.').notEmpty();
+    req.checkBody('course', 'Course must be specified.').notEmpty();
 
     req.sanitize('name').trim();     
     req.sanitize('email').trim();
     req.sanitize('mobile').trim();
-    req.sanitize('date_of_birth').toDate();
     req.sanitize('school').trim();
     req.sanitize('department').trim();
     req.sanitize('course').trim();
@@ -29,8 +39,19 @@ exports.createStudent = function (req, res, next) {
     var errors = req.validationErrors();
 
     // Create new student object from form Inputs
-    var student = new Student(req.body);
-    console.log(req.body);
+    var student = new Student({
+        name: req.body.name, 
+        email: req.body.email, 
+        mobile: req.body.mobile, 
+        school: req.body.school, 
+        department: req.body.department, 
+        course: req.body.course, 
+        nationality: req.body.nationality, 
+        state: req.body.state, 
+        dob: req.body.dob, 
+        profileimage: profileimage
+    });
+    console.log(student);
 
     // Check for validation error
     // If any redirect student to fill form again 
@@ -60,16 +81,25 @@ exports.studentDetail = function (req, res, next) {
 }
 
 exports.editStudent = function (req, res, next) {
-    
+     // Check File Upload
+     if (req.file){
+        console.log('Uploading Image...');
+        var profileimage = req.file.filename;
+    } else {
+        console.log('NO image Upload!');
+        var profileimage = '';
+    }
+
+    // Form Validation
     req.checkBody('name', 'Name must be specified.').notEmpty();
     req.checkBody('email', 'Invalid email address.').isEmail();
-    req.checkBody('mobile', 'Mobile must be specified.').notEmpty();
-    req.checkBody('date_of_birth', 'Invalid date').notEmpty();
+    req.checkBody('school', 'School must be specified.').notEmpty();
+    req.checkBody('department', 'Department must be specified.').notEmpty();
+    req.checkBody('course', 'Course must be specified.').notEmpty();
 
     req.sanitize('name').trim();     
     req.sanitize('email').trim();
     req.sanitize('mobile').trim();
-    req.sanitize('date_of_birth').toDate();
     req.sanitize('school').trim();
     req.sanitize('department').trim();
     req.sanitize('course').trim();
@@ -78,12 +108,42 @@ exports.editStudent = function (req, res, next) {
     
     // Get Validation Errors
     var errors = req.validationErrors();
-    if (errors){
+
+    // Create new student object from form Inputs
+
+    var name = req.body.name;
+    var email = req.body.email; 
+    var mobile = req.body.mobile;
+    var school = req.body.school;
+    var department = req.body.department;
+    var course = req.body.course;
+    var nationality = req.body.nationality;
+    var state = req.body.state;
+    var dob = req.body.dob;
+    var profileimage = profileimage;
+    
+    //console.log(student);
+
+    // Check for validation error
+    // If any redirect student to fill form again 
+    if(errors){
         console.log(errors)
         res.json(errors);
         return;
     } else {
-        Student.findOneAndUpdate({_id: req.params.id}, req.body, 
+        Student.findOneAndUpdate({_id: req.params.id}, { "$set": {
+                "name": name, 
+                "email": email, 
+                "mobile": mobile,
+                "school": school,
+                "department": department,
+                "course": course,
+                "nationality": nationality,
+                "state": state,
+                "dob": dob,
+                "profileimage": profileimage
+
+            }}, 
             {
                 new: true,
                 runValidators: true

@@ -10,6 +10,8 @@ var flash = require('connect-flash');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var cors = require('cors');
+var multer = require('multer');
+var upload = multer({dest: './public/images'});
 
 var index = require('./routes/index');
 
