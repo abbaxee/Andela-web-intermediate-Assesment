@@ -9,16 +9,18 @@ var session = require('express-session');
 var flash = require('connect-flash');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-var cors = require('cors');
+// var cors = require('cors');
 var multer = require('multer');
 var upload = multer({dest: './public/images'});
 
 var index = require('./routes/index');
+var compression = require('compression');
+var helmet = require('helmet');
 
 var app = express();
 
-//moment 
-app.locals.moment = require('moment');
+app.use(helmet());
+app.use(compression()); //Compress all routes
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -32,9 +34,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// cors
-app.use(cors({origin: 'null'}));
 
 app.use('/', index);
 
@@ -63,7 +62,7 @@ app.use(function (req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get('env') === 'production' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
