@@ -9,7 +9,7 @@ var session = require('express-session');
 var flash = require('connect-flash');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-// var cors = require('cors');
+var cors = require('cors');
 var multer = require('multer');
 var upload = multer({dest: './public/images'});
 
@@ -22,9 +22,11 @@ var app = express();
 app.use(helmet());
 app.use(compression()); //Compress all routes
 
+app.use(cors());
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

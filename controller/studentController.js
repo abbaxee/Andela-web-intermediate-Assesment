@@ -63,6 +63,7 @@ exports.createStudent = function (req, res, next) {
         //if no error save student to database and redirect to homepage
         student.save(function (err, student) {
             if(err){
+                console.log(err);
                 res.send(err); 
             } 
             res.redirect('/');
@@ -81,76 +82,76 @@ exports.studentDetail = function (req, res, next) {
 }
 
 exports.editStudent = function (req, res, next) {
-     // Check File Upload
-     if (req.file){
-        console.log('Uploading Image...');
-        var profileimage = req.file.filename;
-    } else {
-        console.log('NO image Upload!');
-        var profileimage = '';
-    }
+    // Check File Upload
+    if (req.file){
+       console.log('Uploading Image...');
+       var profileimage = req.file.filename;
+   } else {
+       console.log('NO image Upload!');
+       var profileimage = '';
+   }
 
-    // Form Validation
-    req.checkBody('name', 'Name must be specified.').notEmpty();
-    req.checkBody('email', 'Invalid email address.').isEmail();
-    req.checkBody('school', 'School must be specified.').notEmpty();
-    req.checkBody('department', 'Department must be specified.').notEmpty();
-    req.checkBody('course', 'Course must be specified.').notEmpty();
+   // Form Validation
+   req.checkBody('name', 'Name must be specified.').notEmpty();
+   req.checkBody('email', 'Invalid email address.').isEmail();
+   req.checkBody('school', 'School must be specified.').notEmpty();
+   req.checkBody('department', 'Department must be specified.').notEmpty();
+   req.checkBody('course', 'Course must be specified.').notEmpty();
 
-    req.sanitize('name').trim();     
-    req.sanitize('email').trim();
-    req.sanitize('mobile').trim();
-    req.sanitize('school').trim();
-    req.sanitize('department').trim();
-    req.sanitize('course').trim();
-    req.sanitize('nationality').trim();
-    req.sanitize('state').trim();
-    
-    // Get Validation Errors
-    var errors = req.validationErrors();
+   req.sanitize('name').trim();     
+   req.sanitize('email').trim();
+   req.sanitize('mobile').trim();
+   req.sanitize('school').trim();
+   req.sanitize('department').trim();
+   req.sanitize('course').trim();
+   req.sanitize('nationality').trim();
+   req.sanitize('state').trim();
+   
+   // Get Validation Errors
+   var errors = req.validationErrors();
 
-    // Create new student object from form Inputs
+   // Create new student object from form Inputs
 
-    var name = req.body.name;
-    var email = req.body.email; 
-    var mobile = req.body.mobile;
-    var school = req.body.school;
-    var department = req.body.department;
-    var course = req.body.course;
-    var nationality = req.body.nationality;
-    var state = req.body.state;
-    var dob = req.body.dob;
-    var profileimage = profileimage;
-    
-    //console.log(student);
+   var name = req.body.name;
+   var email = req.body.email; 
+   var mobile = req.body.mobile;
+   var school = req.body.school;
+   var department = req.body.department;
+   var course = req.body.course;
+   var nationality = req.body.nationality;
+   var state = req.body.state;
+   var dob = req.body.dob;
+   var profileimage = profileimage;
+   
+   //console.log(student);
 
-    // Check for validation error
-    // If any redirect student to fill form again 
-    if(errors){
-        console.log(errors)
-        res.json(errors);
-        return;
-    } else {
-        Student.findOneAndUpdate({_id: req.params.id}, { "$set": {
-                "name": name, 
-                "email": email, 
-                "mobile": mobile,
-                "school": school,
-                "department": department,
-                "course": course,
-                "nationality": nationality,
-                "state": state,
-                "dob": dob,
-                "profileimage": profileimage
+   // Check for validation error
+   // If any redirect student to fill form again 
+   if(errors){
+       console.log(errors)
+       res.json(errors);
+       return;
+   } else {
+       Student.findOneAndUpdate({_id: req.params.id}, { "$set": {
+               "name": name, 
+               "email": email, 
+               "mobile": mobile,
+               "school": school,
+               "department": department,
+               "course": course,
+               "nationality": nationality,
+               "state": state,
+               "dob": dob,
+               "profileimage": profileimage
 
-            }}, 
-            {
-                new: true,
-                runValidators: true
-            }).exec();
-            console.log(req.body);
-            res.redirect('/'); 
-        }  
+           }}, 
+           {
+               new: true,
+               runValidators: true
+           }).exec();
+           console.log(req.body);
+           res.redirect('/'); 
+       }  
 }
 
 exports.deleteStudent = function (req, res, next) {
